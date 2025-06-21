@@ -1,7 +1,7 @@
 import telebot
 import asyncio
 import requests
-token='7752640605:AAGTXJR_V9HSq0sRahRiBsZxlW7fMCTCFUY'
+token=''
 
 
 my_data = []
