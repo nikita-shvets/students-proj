@@ -79,7 +79,7 @@ async def send_tasks(data:TasksSchema,session:SessionDep):
         final_list.append([data.tg_names[i], links[i]])
     return final_list
 def send_message(chat_id,message):
-    token = '7752640605:AAGTXJR_V9HSq0sRahRiBsZxlW7fMCTCFUY'
+    token = ''
     bot = telebot.TeleBot(token)
     bot.send_message(chat_id,message)
 
