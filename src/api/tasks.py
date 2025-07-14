@@ -19,6 +19,11 @@ router = APIRouter()
     summary='создать варианты ОГЭ и отправить ученикам с помощью бота'
 )
 async def send_tasks(data:TasksSchema,session:SessionDep):
+<<<<<<< HEAD
+=======
+    token = ''
+    bot = telebot.TeleBot(token)
+>>>>>>> c402b0f8ece70efc5c6c1a2bde568e93691a2a31
     tg_names_database = await  get_students(session)
     ids = []
     links = []
