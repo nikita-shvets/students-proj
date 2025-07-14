@@ -6,6 +6,7 @@ class TasksSchema(BaseModel):
     time_to_do : int
     tasks : list[int]
 class TasksTeachersSchema(BaseModel):
-    tasks : list[int]
-    group_name : list[str]
+    subject : str
+    group_id : int
     time_to_do : int
+    tasks : list[int]

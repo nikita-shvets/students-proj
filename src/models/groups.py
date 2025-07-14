@@ -10,4 +10,4 @@ class groups(Base):
 
     id = Column(Integer, primary_key=True)
     teachers_id = Column(Integer, nullable=False)
-    students_ids = Column(String,nullable=False)
+    students_names = Column(String,nullable=False)

@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-class StudentsaddSchema(BaseModel):
-    tg_id: int
-    tg_name: str
-class StudentsSchema(StudentsaddSchema):
+class studentsaddSchema(BaseModel):
+    tg_id: int = None
+    tg_name: str = None
+class studentsSchema(studentsaddSchema):
     id:int

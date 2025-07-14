@@ -6,7 +6,7 @@ from sqlalchemy.orm import DeclarativeBase ,Mapped, mapped_column
 from src.database import Base
 
 
-class Student(Base):
+class students(Base):
     __tablename__ = "students.db"
 
     id = Column(Integer, primary_key=True)

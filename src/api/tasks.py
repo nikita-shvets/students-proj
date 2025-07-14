@@ -1,7 +1,8 @@
 from fastapi import APIRouter
-from src.schema.tasks import TasksSchema
+from src.schema.tasks import TasksSchema, TasksTeachersSchema
 from src.api.dependencies import SessionDep
 from src.api.students import get_students
+from src.api.groups import get_groups_id
 import re
 import telebot
 from selenium import webdriver
@@ -18,18 +19,16 @@ router = APIRouter()
     summary='создать варианты ОГЭ и отправить ученикам с помощью бота'
 )
 async def send_tasks(data:TasksSchema,session:SessionDep):
-    token = '7752640605:AAGTXJR_V9HSq0sRahRiBsZxlW7fMCTCFUY'
-    bot = telebot.TeleBot(token)
     tg_names_database = await  get_students(session)
     ids = []
     links = []
     final_list = []
-    print(tg_names_database[0].tg_id)
     for el in data.tg_names:
         for elem in tg_names_database:
             if elem.tg_name == el:
                 ids.append(elem.tg_id)
-
+    if not ids:
+        raise HTTPException(status_code=404, detail="<student not found>")
     for i in range(len(data.tg_names)):
         driver = webdriver.Chrome()
 
@@ -71,6 +70,26 @@ async def send_tasks(data:TasksSchema,session:SessionDep):
         links.append('https://math-oge.sdamgia.ru/test?id=' + l[0])
         driver.quit()
     for i in range (len(ids)):
-        bot.send_message(ids[i], links[i])
+        send_message(ids[i],links[i])
         final_list.append([data.tg_names[i], links[i]])
     return final_list
+def send_message(chat_id,message):
+    token = '7752640605:AAGTXJR_V9HSq0sRahRiBsZxlW7fMCTCFUY'
+    bot = telebot.TeleBot(token)
+    bot.send_message(chat_id,message)
+
+@router.post(
+    '/send_tasks_to_groups',
+    tags=['Варианты ОГЭ'],
+    summary='создать варианты ОГЭ и отправить группе учеников с помощью бота'
+)
+async def send_task_to_groups(data: TasksTeachersSchema, session:SessionDep):
+    new_data = TasksSchema
+    new_data.subject = data.subject
+    new_data.time_to_do = data.time_to_do
+    new_data.tasks = data.tasks
+    group = await get_groups_id(session, data.group_id)
+    new_data.tg_names = group[0].students_names.split(",")
+    result =  await send_tasks(new_data, session)
+    return result
+
